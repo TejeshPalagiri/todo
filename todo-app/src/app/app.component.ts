@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { MatSliderModule } from '@angular/material/slider';
 
 @Component({
   selector: 'app-root',
@@ -7,6 +6,5 @@ import { MatSliderModule } from '@angular/material/slider';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'todo';
-  
+  title = 'todo-app';
 }

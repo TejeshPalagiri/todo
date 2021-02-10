@@ -7,6 +7,9 @@ const cors = require("cors");
 const serveStatic = require("serve-static");
 const mongodb = require("mongodb").MongoClient;
 const objectId = require("mongodb").ObjectID;
+const requestIp = require("request-ip");
+const { ObjectID } = require("mongodb");
+
 const dbName = "tododocs";
 const dbURL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@chatapp.rz0qg.gcp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 let database;
@@ -73,12 +76,64 @@ function authtoken(req, res, next) {
   });
 }
 
+app.get("/api/getIp", (req, res) => {
+  ipAddress = requestIp.getClientIp(req);
+  res.send({
+    ipAddress,
+  });
+});
+
+let getIp = async (request) => {
+  let ipAddress = await requestIp.getClientIp(request);
+  return ipAddress;
+};
+
+// Whitelisted ip check middleware
+let checkWhiteListed = async (req, res, next) => {
+  let ipFromRequest = await getIp(req);
+  const isIpWhitelisted = await database
+    .collection("whitelist")
+    .find({
+      ipAddress: ipFromRequest,
+    })
+    .toArray();
+  // console.log(isIpWhitelisted);
+  if (isIpWhitelisted.length) {
+    console.log(`Ip is whitelisted: ${ipFromRequest}`);
+    next();
+  } else {
+    res.send({
+      status: 401,
+      data: "Unauthorized Access",
+    });
+  }
+};
+
+app.get("/api/releaseIp", async (req, res) => {
+  let ipAddress = await getIp(req);
+  let whiteListIp = await database
+    .collection("whitelist")
+    .insertOne({ ipAddress: ipAddress, createdDate: Date.now() });
+
+  if (whiteListIp.insertedId) {
+    res.send({
+      status: 200,
+      data: "Ip released Successfully",
+    });
+  } else {
+    res.send({
+      status: 400,
+      data: "Failed to save Ip",
+    });
+  }
+});
+
 app.get("/api", (req, res) => {
   res.send("Hello this is not the right place you are");
 });
 
 // Adding a todo
-app.post("/api/addtodo", async (req, res) => {
+app.post("/api/addtodo", checkWhiteListed, async (req, res) => {
   try {
     let name = req.body.name;
     if (!name || name.length < 2) {
@@ -118,7 +173,7 @@ app.post("/api/addtodo", async (req, res) => {
 });
 
 // Edit a todo
-app.put("/api/addtodo/:id", async (req, res) => {
+app.put("/api/addtodo/:id", checkWhiteListed, async (req, res) => {
   try {
     let taskId = req.params.id;
     if (!taskId || typeof taskId != "string") {
@@ -168,7 +223,7 @@ app.put("/api/addtodo/:id", async (req, res) => {
 });
 
 // Getting all todo
-app.get("/api/gettodo", async (req, res) => {
+app.get("/api/gettodo", checkWhiteListed, async (req, res) => {
   try {
     let allTasks = await database
       .collection("tododocs")
@@ -192,7 +247,7 @@ app.get("/api/gettodo", async (req, res) => {
 });
 
 // Delete todo
-app.delete("/api/deleteTask/:id", async (req, res) => {
+app.delete("/api/deleteTask/:id", checkWhiteListed, async (req, res) => {
   try {
     let taskId = req.params.id;
     if (!taskId || typeof taskId != "string") {
@@ -226,7 +281,7 @@ app.delete("/api/deleteTask/:id", async (req, res) => {
 });
 
 // Completed Task
-app.put("/api/completedTask/:id", async (req, res) => {
+app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
   try {
     let taskId = req.params.id;
     if (!taskId || typeof taskId != "string") {

@@ -315,6 +315,14 @@ app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
   }
 });
 
+app.get("/*", (req, res) => {
+  // console.log("failed route");
+  res.send({
+    status: 200,
+    data: "This is not the right place",
+  });
+});
+
 app.listen(port, () => {
   console.log("Running on port:", port);
 });

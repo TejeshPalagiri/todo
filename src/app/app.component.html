@@ -511,3 +511,11 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 
+<div class="content" role="main">
+<p>New todos</p>
+  <ul>
+    <li *ngFor = "let todo of todoList['data'] ">
+      {{ todo.name }}
+    </li>
+  </ul>
+</div>

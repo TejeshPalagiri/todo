@@ -41,6 +41,9 @@ build/Release
 node_modules/
 jspm_packages/
 
+# Front-end Build
+dist/
+
 # TypeScript v1 declaration files
 typings/
 
@@ -101,9 +104,6 @@ typings/
 
 # TernJS port file
 .tern-port
-
-# Front-end Build
-dist/
 
 #package-locj.json
 package-lock.json

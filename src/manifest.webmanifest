@@ -1,6 +1,6 @@
 {
-  "name": "mytodo",
-  "short_name": "mytodo",
+  "name": "MyTodo",
+  "short_name": "MyTodo",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

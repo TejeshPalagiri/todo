@@ -104,3 +104,6 @@ typings/
 
 # Front-end Build
 dist/
+
+#package-locj.json
+package-lock.json

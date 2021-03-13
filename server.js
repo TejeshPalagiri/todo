@@ -315,12 +315,14 @@ app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
   }
 });
 
+// Wild card route
 app.get("/*", (req, res) => {
   // console.log("failed route");
-  res.send({
-    status: 200,
-    data: "This is not the right place",
-  });
+  res.redirect('/');
+  // res.send({
+  //   status: 200,
+  //   data: "This is not the right place",
+  // });
 });
 
 app.listen(port, () => {

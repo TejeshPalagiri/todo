@@ -13,7 +13,7 @@ const requestIp = require("request-ip");
 const dbName = "tododocs";
 const dbURL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@chatapp.rz0qg.gcp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 let database;
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 mongodb.connect(
   dbURL,

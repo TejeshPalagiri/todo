@@ -8,7 +8,7 @@ const serveStatic = require("serve-static");
 const mongodb = require("mongodb").MongoClient;
 const objectId = require("mongodb").ObjectID;
 const requestIp = require("request-ip");
-const { ObjectID } = require("mongodb");
+// const { ObjectID } = require("mongodb");
 
 const dbName = "tododocs";
 const dbURL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@chatapp.rz0qg.gcp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;

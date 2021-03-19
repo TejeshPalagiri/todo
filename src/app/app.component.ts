@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export class AppComponent {
   title = 'mytodo';
   todoList: any = [];
+  gettingTodosLoading = false;
   constructor(private httpClient: HttpClient) { }
 
   ngOnInit() {
@@ -16,9 +17,11 @@ export class AppComponent {
   }
 
   getTodos() {
-    this.httpClient.get('/api/gettodo').subscribe((result) => {
+    this.gettingTodosLoading = true;
+    this.httpClient.get('/api/gettodo').subscribe((result: any) => {
       console.log("API response", result);
       this.todoList = result;
+      this.gettingTodosLoading = false;
     });
   }
 }

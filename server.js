@@ -110,20 +110,28 @@ let checkWhiteListed = async (req, res, next) => {
 };
 
 app.get("/api/releaseIp", async (req, res) => {
-  let ipAddress = await getIp(req);
-  let whiteListIp = await database
-    .collection("whitelist")
-    .insertOne({ ipAddress: ipAddress, createdDate: Date.now() });
+  try {
+    let ipAddress = await getIp(req);
+    let whiteListIp = await database
+      .collection("whitelist")
+      .insertOne({ ipAddress: ipAddress, createdDate: Date.now() });
 
-  if (whiteListIp.insertedId) {
+    if (whiteListIp.insertedId) {
+      res.send({
+        status: 200,
+        data: "Ip released Successfully",
+      });
+    } else {
+      res.send({
+        status: 400,
+        data: "Failed to save Ip",
+      });
+    }
+  } catch (error) {
+    console.error(error);
     res.send({
       status: 200,
-      data: "Ip released Successfully",
-    });
-  } else {
-    res.send({
-      status: 400,
-      data: "Failed to save Ip",
+      data: "Internal server error",
     });
   }
 });
@@ -149,11 +157,18 @@ app.post("/api/addtodo", checkWhiteListed, async (req, res) => {
         data: "Description is needed and should be greater than 2 Charecters",
       });
     }
+    let date = req.body.date || Date.now();
+    if (!date || typeof date != "number") {
+      res.send({
+        status: 429,
+        data: "Date is needed",
+      });
+    }
     let addTodo = await database.collection("tododocs").insertOne({
       name: name,
       text: description,
       status: "added",
-      createdDate: Date.now(),
+      createdDate: date,
     });
 
     if (addTodo.insertedCount) {
@@ -169,6 +184,10 @@ app.post("/api/addtodo", checkWhiteListed, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    res.send({
+      status: 500,
+      data: "Internal server error",
+    });
   }
 });
 
@@ -193,6 +212,13 @@ app.put("/api/addtodo/:id", checkWhiteListed, async (req, res) => {
         data: "Description is needed and should be greater than 2 Charecters",
       });
     }
+    let date = req.body.date || Date.now();
+    if (!date || typeof date != "number") {
+      res.send({
+        status: 429,
+        data: "Date is needed",
+      });
+    }
     let updateTask = await database.collection("tododocs").updateOne(
       {
         _id: objectId(taskId),
@@ -202,7 +228,7 @@ app.put("/api/addtodo/:id", checkWhiteListed, async (req, res) => {
         $set: {
           name: name,
           text: description,
-          updatedDate: Date.now(),
+          updatedDate: date,
         },
       }
     );
@@ -219,6 +245,10 @@ app.put("/api/addtodo/:id", checkWhiteListed, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    res.send({
+      status: 500,
+      data: "Internal server error",
+    });
   }
 });
 
@@ -243,6 +273,10 @@ app.get("/api/gettodo", checkWhiteListed, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    res.send({
+      status: 500,
+      data: "Internal server error",
+    });
   }
 });
 
@@ -253,6 +287,13 @@ app.delete("/api/deleteTask/:id", checkWhiteListed, async (req, res) => {
     if (!taskId || typeof taskId != "string") {
       res.send({ status: 429, data: "Id is required to edit the task" });
     }
+    let date = req.body.date || Date.now();
+    if (!date || typeof date != "number") {
+      res.send({
+        status: 429,
+        data: "Date is needed",
+      });
+    }
     let deletedTask = await database.collection("tododocs").updateOne(
       {
         _id: objectId(taskId),
@@ -260,7 +301,7 @@ app.delete("/api/deleteTask/:id", checkWhiteListed, async (req, res) => {
       {
         $set: {
           status: "removed",
-          updatedDate: Date.now(),
+          updatedDate: date,
         },
       }
     );
@@ -277,6 +318,10 @@ app.delete("/api/deleteTask/:id", checkWhiteListed, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    res.send({
+      status: 500,
+      data: "Internal server error",
+    });
   }
 });
 
@@ -287,6 +332,13 @@ app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
     if (!taskId || typeof taskId != "string") {
       res.send({ status: 429, data: "Id is required to edit the task" });
     }
+    let date = req.body.date || Date.now();
+    if (!date || typeof date != "number") {
+      res.send({
+        status: 429,
+        data: "Date is needed",
+      });
+    }
     let updatedDocument = await database.collection("tododocs").updateOne(
       {
         _id: objectId(taskId),
@@ -295,7 +347,7 @@ app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
       {
         $set: {
           status: "completed",
-          updatedDate: Date.now(),
+          updatedDate: date,
         },
       }
     );
@@ -312,13 +364,17 @@ app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
+    res.send({
+      status: 500,
+      data: "Internal server error",
+    });
   }
 });
 
 // Wild card route
 app.get("/*", (req, res) => {
   // console.log("failed route");
-  res.redirect('/');
+  res.redirect("/");
   // res.send({
   //   status: 200,
   //   data: "This is not the right place",

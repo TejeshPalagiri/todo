@@ -130,7 +130,7 @@ app.get("/api/releaseIp", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.send({
-      status: 200,
+      status: 500,
       data: "Internal server error",
     });
   }

@@ -24,12 +24,39 @@
   </div>
 </div>
 
-<div class="container mt-5">
+<div class="container mt-5" *ngIf="!isUnAuthorized">
   <div class="row">
-    <div class="col-md-4 w-25">
+    <div class="col-md-4 col-12 w-25">
+      <!-- <form> -->
       <p>Add new todo</p>
+      <div class="form-floating mb-3 w-100">
+        <input
+          type="text"
+          class="form-control"
+          id="todoName"
+          placeholder="Enter Todo Name"
+          [formControl]="todoName"
+          required
+        />
+        <label for="todoName">Todo Name <span style="color: red;">*</span> </label>
+      </div>
+      <div class="form-floating mb-3 w-100">
+        <textarea
+          class="form-control"
+          placeholder="Todo Description"
+          id="todoDescription"
+          style="height: 100px;"
+        ></textarea>
+        <label for="todoDescription">Todo Description <span style="color: red;">*</span> </label>
+      </div>
+      <div class="form-floating mb-3">
+        <button type="submit" class="btn btn-primary"> Add Todo </button>
+      </div>
+      <!-- </form> -->
     </div>
-    <div class="col-md-4 w-50 d-flex align-items-center justify-content-center" >
+    <div
+      class="col-md-4 col-12 w-50 d-flex align-items-center justify-content-center"
+    >
       <div class="spinner-border" role="status" *ngIf="gettingTodosLoading">
         <span class="sr-only"></span>
       </div>
@@ -55,7 +82,7 @@
         </tbody>
       </table>
     </div>
-    <div class="col-md-4 w-25">
+    <div class="col-md-4 col-12 w-25">
       <p>Completed todos</p>
     </div>
   </div>

@@ -38,21 +38,30 @@
           [formControl]="todoName"
           required
         />
-        <label for="todoName">Todo Name <span style="color: red;">*</span> </label>
+        <label for="todoName"
+          >Todo Name <span style="color: red">*</span>
+        </label>
       </div>
       <div class="form-floating mb-3 w-100">
         <textarea
           class="form-control"
           placeholder="Todo Description"
           id="todoDescription"
-          style="height: 100px;"
+          [formControl]="todoDescription"
+          style="height: 100px"
         ></textarea>
-        <label for="todoDescription">Todo Description <span style="color: red;">*</span> </label>
+        <label for="todoDescription"
+          >Todo Description <span style="color: red">*</span>
+        </label>
       </div>
       <div class="form-floating mb-3">
-        <button type="submit" class="btn btn-primary"> Add Todo </button>
+        <button type="submit" class="btn btn-primary" (click)="addNewTodo()" >Add Todo</button>
       </div>
       <!-- </form> -->
+      <div class="alert alert-danger" role="alert" *ngIf="customErros.show">
+        <strong>Ohh Shit!</strong> {{ customErros.error }}
+        again.
+      </div>
     </div>
     <div
       class="col-md-4 col-12 w-50 d-flex align-items-center justify-content-center"

@@ -81,6 +81,7 @@ export class AppComponent {
   }
 
   addNewTodo() {
+    console.log(`${this.todoName.value} and ${this.todoDescription.value}`);
     if (
       (this.todoName && this.todoName.value == "") ||
       (this.todoDescription && this.todoDescription.value == "")
@@ -94,11 +95,34 @@ export class AppComponent {
         status: "",
         show: false,
       };
+      console.log("In else");
+      let requestObj = {
+        name: this.todoName.value,
+        description: this.todoDescription.value,
+        date: Date.now(),
+      };
+      this.httpClient.post(`${this.apiUrl}addtodo`, requestObj).subscribe(
+        (response: any) => {
+          if (response.status == 200) {
+            this.customErros = {
+              error: response.data,
+              status: response.status,
+              show: true,
+            };
+          } else {
+            this.customErros = {
+              error: response.data,
+              status: response.status,
+              show: true,
+            };
+          }
+        },
+        (error) => {
+          console.log("Error", error);
+          this.errorRedirected = true;
+          this.gettingTodosLoading = false;
+        }
+      );
     }
-    let requestObj = {
-      name: this.todoName.value,
-      description:
-    };
-    this.httpClient.post
   }
 }

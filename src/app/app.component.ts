@@ -14,7 +14,7 @@ export class AppComponent {
   isUnAuthorized = false;
   isInternalServerError = false;
   errorRedirected = false;
-  apiUrl = '/api/';
+  apiUrl = "/api/";
 
   // Form elemnts
   passcode = new FormControl("");
@@ -22,7 +22,7 @@ export class AppComponent {
   todoDescription = new FormControl("");
 
   // Errors Object
-  customErros = {
+  customErrors = {
     error: "",
     status: "",
     show: false,
@@ -86,11 +86,11 @@ export class AppComponent {
       (this.todoName && this.todoName.value == "") ||
       (this.todoDescription && this.todoDescription.value == "")
     ) {
-      this.customErros.error = "Fill all the required fields";
-      this.customErros.show = true;
-      this.customErros.status = "Error";
+      this.customErrors.error = "Fill all the required fields";
+      this.customErrors.show = true;
+      this.customErrors.status = "Error";
     } else {
-      this.customErros = {
+      this.customErrors = {
         error: "",
         status: "",
         show: false,
@@ -104,13 +104,14 @@ export class AppComponent {
       this.httpClient.post(`${this.apiUrl}addtodo`, requestObj).subscribe(
         (response: any) => {
           if (response.status == 200) {
-            this.customErros = {
-              error: response.data,
+            this.customErrors = {
+              error: "Successfully Inserted a task",
               status: response.status,
               show: true,
             };
+            this.getTodos();
           } else {
-            this.customErros = {
+            this.customErrors = {
               error: response.data,
               status: response.status,
               show: true,
@@ -125,4 +126,6 @@ export class AppComponent {
       );
     }
   }
+
+  editTodo() {}
 }

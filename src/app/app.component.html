@@ -26,7 +26,7 @@
 
 <div class="container mt-5" *ngIf="!isUnAuthorized">
   <div class="row">
-    <div class="col-md-4 col-12 w-25">
+    <div class="col-12 col-md-4">
       <!-- <form> -->
       <p>Add new todo</p>
       <div class="form-floating mb-3 w-100">
@@ -55,16 +55,24 @@
         </label>
       </div>
       <div class="form-floating mb-3">
-        <button type="submit" class="btn btn-primary" (click)="addNewTodo()" >Add Todo</button>
+        <button type="submit" class="btn btn-primary" (click)="addNewTodo()">
+          Add Todo
+        </button>
       </div>
       <!-- </form> -->
-      <div class="alert alert-danger" role="alert" *ngIf="customErros.show">
-        <strong>Ohh Shit!</strong> {{ customErros.error }}
-        again.
+      <div
+        class="alert"
+        [ngClass]="
+          customErrors.error != 'Successfully Inserted a task' ? 'alert-danger' : 'alert-success'
+        "
+        role="alert"
+        *ngIf="customErrors.show"
+      >
+        <strong *ngIf="customErrors.error != 'Successfully Inserted a task'">Ohh Shit!</strong> {{ customErrors.error }}
       </div>
     </div>
     <div
-      class="col-md-4 col-12 w-50 d-flex align-items-center justify-content-center"
+      class="col-12 col-md-8 d-flex align-items-center justify-content-center table-responsive"
     >
       <div class="spinner-border" role="status" *ngIf="gettingTodosLoading">
         <span class="sr-only"></span>
@@ -79,6 +87,7 @@
             <th>Todo Name</th>
             <th>Todo Description</th>
             <th>Status</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -87,11 +96,12 @@
             <td class="text-capitalize">{{ todo["name"] }}</td>
             <td class="text-capitalize">{{ todo["text"] }}</td>
             <td class="text-capitalize">{{ todo["status"] }}</td>
+            <td></td>
           </tr>
         </tbody>
       </table>
     </div>
-    <div class="col-md-4 col-12 w-25">
+    <div class="col-12">
       <p>Completed todos</p>
     </div>
   </div>

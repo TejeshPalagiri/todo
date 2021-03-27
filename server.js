@@ -47,7 +47,7 @@ app.post("/api/login", (req, res) => {
 });
 
 app.get("/api/data", authtoken, (req, res) => {
-  res.send(data);
+  return res.send(data);
 });
 
 function authtoken(req, res, next) {
@@ -78,7 +78,7 @@ function authtoken(req, res, next) {
 
 app.get("/api/getIp", (req, res) => {
   ipAddress = requestIp.getClientIp(req);
-  res.send({
+  return res.send({
     ipAddress,
   });
 });
@@ -97,12 +97,12 @@ let checkWhiteListed = async (req, res, next) => {
       ipAddress: ipFromRequest,
     })
     .toArray();
-  // console.log(isIpWhitelisted);  
+  // console.log(isIpWhitelisted);
   if (isIpWhitelisted.length) {
     console.log(`Ip is whitelisted: ${ipFromRequest}`);
     next();
   } else {
-    res.send({
+    return res.send({
       status: 401,
       data: "Unauthorized Access",
     });
@@ -117,19 +117,19 @@ app.get("/api/releaseIp", async (req, res) => {
       .insertOne({ ipAddress: ipAddress, createdDate: Date.now() });
 
     if (whiteListIp.insertedId) {
-      res.send({
+      return res.send({
         status: 200,
         data: "Ip released Successfully",
       });
     } else {
-      res.send({
+      return res.send({
         status: 400,
         data: "Failed to save Ip",
       });
     }
   } catch (error) {
     console.error(error);
-    res.send({
+    return res.send({
       status: 500,
       data: "Internal server error",
     });
@@ -137,7 +137,7 @@ app.get("/api/releaseIp", async (req, res) => {
 });
 
 app.get("/api", (req, res) => {
-  res.send("Hello this is not the right place you are");
+  return res.send("Hello this is not the right place you are");
 });
 
 // Adding a todo
@@ -145,23 +145,24 @@ app.post("/api/addtodo", checkWhiteListed, async (req, res) => {
   try {
     let name = req.body.name;
     if (!name || name.length < 2) {
-      res.send({
+      return res.send({
         status: 429,
         message: "Name is needed and should be greater than 2 Charecters",
-        data: {}
+        data: {},
       });
     }
     let description = req.body.description;
     if (!description || description.length < 3) {
-      res.send({
+      return res.send({
         status: 429,
-        message: "Description is needed and should be greater than 2 Charecters",
-        data: {}
+        message:
+          "Description is needed and should be greater than 2 Charecters",
+        data: {},
       });
     }
     let date = req.body.date || Date.now();
     if (!date || typeof date != "number") {
-      res.send({
+      return res.send({
         status: 429,
         message: "Date is required",
         data: {},
@@ -175,24 +176,24 @@ app.post("/api/addtodo", checkWhiteListed, async (req, res) => {
     });
 
     if (addTodo.insertedCount) {
-      res.send({
+      return res.send({
         status: 200,
         message: "Task Added Successfully",
-        data: {}
+        data: {},
       });
     } else {
-      res.send({
+      return res.send({
         status: 400,
         message: "Failed to add a task",
-        data: {}
+        data: {},
       });
     }
   } catch (error) {
     console.error(error);
-    res.send({
+    return res.send({
       status: 500,
       message: "Internal server error",
-      data: {}
+      data: {},
     });
   }
 });
@@ -202,30 +203,31 @@ app.put("/api/addtodo/:id", checkWhiteListed, async (req, res) => {
   try {
     let taskId = req.params.id;
     if (!taskId || typeof taskId != "string") {
-      res.send({ status: 429, data: "Id is required to edit the task" });
+      return res.send({ status: 429, data: "Id is required to edit the task" });
     }
     let name = req.body.name;
     if (!name || name.length < 2) {
-      res.send({
+      return res.send({
         status: 429,
         message: "Name is needed and should be greater than 2 Charecters",
-        data: {}
+        data: {},
       });
     }
     let description = req.body.description;
     if (!description || description.length < 3) {
-      res.send({
+      return res.send({
         status: 429,
-        message: "Description is needed and should be greater than 2 Charecters",
-        data: {}
+        message:
+          "Description is needed and should be greater than 2 Charecters",
+        data: {},
       });
     }
     let date = req.body.date || Date.now();
     if (!date || typeof date != "number") {
-      res.send({
+      return res.send({
         status: 429,
         message: "Date is needed",
-        data: {}
+        data: {},
       });
     }
     let updateTask = await database.collection("tododocs").updateOne(
@@ -242,24 +244,24 @@ app.put("/api/addtodo/:id", checkWhiteListed, async (req, res) => {
       }
     );
     if (updateTask.result.nModified) {
-      res.send({
+      return res.send({
         status: 200,
         message: "Task updated Successfully",
-        data: {}
+        data: {},
       });
     } else {
-      res.send({
+      return res.send({
         status: 404,
         message: "Failed to update task",
-        data: {}
+        data: {},
       });
     }
   } catch (error) {
     console.error(error);
-    res.send({
+    return res.send({
       status: 500,
       message: "Internal server error",
-      data: {}
+      data: {},
     });
   }
 });
@@ -274,13 +276,13 @@ app.get("/api/gettodo", checkWhiteListed, async (req, res) => {
       .toArray();
 
     if (!allTasks.length) {
-      res.send({
+      return res.send({
         status: 200,
         message: "No tasks Found",
-        data: {}
+        data: {},
       });
     } else {
-      res.send({
+      return res.send({
         status: 200,
         message: "Successfully fetched TODOs",
         data: allTasks,
@@ -288,10 +290,10 @@ app.get("/api/gettodo", checkWhiteListed, async (req, res) => {
     }
   } catch (error) {
     console.error(error);
-    res.send({
+    return res.send({
       status: 500,
       message: "Internal server error",
-      data: {}
+      data: {},
     });
   }
 });
@@ -301,14 +303,14 @@ app.delete("/api/deleteTask/:id", checkWhiteListed, async (req, res) => {
   try {
     let taskId = req.params.id;
     if (!taskId || typeof taskId != "string") {
-      res.send({ status: 429, data: "Id is required to edit the task" });
+      return res.send({ status: 429, data: "Id is required to edit the task" });
     }
     let date = req.body.date || Date.now();
     if (!date || typeof date != "number") {
-      res.send({
+      return res.send({
         status: 429,
         message: "Date is needed",
-        data: {}
+        data: {},
       });
     }
     let deletedTask = await database.collection("tododocs").updateOne(
@@ -323,24 +325,24 @@ app.delete("/api/deleteTask/:id", checkWhiteListed, async (req, res) => {
       }
     );
     if (deletedTask.result.nModified) {
-      res.send({
+      return res.send({
         status: 200,
         message: "Task deleted Successfully",
-        data: {}
+        data: {},
       });
     } else {
-      res.send({
+      return res.send({
         status: 404,
         message: "Failed to delete task",
-        data: {}
+        data: {},
       });
     }
   } catch (error) {
     console.error(error);
-    res.send({
+    return res.send({
       status: 500,
       message: "Internal server error",
-      data: {}
+      data: {},
     });
   }
 });
@@ -350,14 +352,14 @@ app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
   try {
     let taskId = req.params.id;
     if (!taskId || typeof taskId != "string") {
-      res.send({ status: 429, data: "Id is required to edit the task" });
+      return res.send({ status: 429, data: "Id is required to edit the task" });
     }
     let date = req.body.date || Date.now();
     if (!date || typeof date != "number") {
-      res.send({
+      return res.send({
         status: 429,
         message: "Date is needed",
-        data: {}
+        data: {},
       });
     }
     let updatedDocument = await database.collection("tododocs").updateOne(
@@ -373,24 +375,24 @@ app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
       }
     );
     if (updatedDocument.result.nModified) {
-      res.send({
+      return res.send({
         status: 200,
         message: "Task Completed Successfully",
-        data: {}
+        data: {},
       });
     } else {
-      res.send({
+      return res.send({
         status: 404,
         message: "Task failed to complete",
-        data: {}
+        data: {},
       });
     }
   } catch (error) {
     console.error(error);
-    res.send({
+    return res.send({
       status: 500,
       message: "Internal server error",
-      data: {}
+      data: {},
     });
   }
 });
@@ -399,7 +401,7 @@ app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
 app.get("/*", (req, res) => {
   // console.log("failed route");
   res.redirect("/");
-  // res.send({
+  // return res.send({
   //   status: 200,
   //   data: "This is not the right place",
   // });

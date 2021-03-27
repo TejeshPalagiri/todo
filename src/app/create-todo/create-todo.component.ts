@@ -1,12 +1,16 @@
-import { Component, OnInit ,Inject} from '@angular/core';
+import { Component, OnInit, Inject } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { HttpClient } from "@angular/common/http";
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import {
+  MatDialog,
+  MatDialogRef,
+  MAT_DIALOG_DATA,
+} from "@angular/material/dialog";
 
 @Component({
-  selector: 'app-create-todo',
-  templateUrl: './create-todo.component.html',
-  styleUrls: ['./create-todo.component.css']
+  selector: "app-create-todo",
+  templateUrl: "./create-todo.component.html",
+  styleUrls: ["./create-todo.component.css"],
 })
 export class CreateTodoComponent implements OnInit {
   title = "mytodo";
@@ -29,18 +33,16 @@ export class CreateTodoComponent implements OnInit {
     show: false,
   };
 
-  constructor(private httpClient: HttpClient,
-    public dialogRef: MatDialogRef<CreateTodoComponent>) {}
-    
-    closeDialog(): void {
-      this.dialogRef.close();
-    }
-  
-  
+  constructor(
+    private httpClient: HttpClient,
+    public dialogRef: MatDialogRef<CreateTodoComponent>
+  ) {}
 
-  ngOnInit(): void {
+  closeDialog(): void {
+    this.dialogRef.close();
   }
 
+  ngOnInit(): void {}
 
   addNewTodo() {
     console.log(`${this.todoName.value} and ${this.todoDescription.value}`);
@@ -74,10 +76,9 @@ export class CreateTodoComponent implements OnInit {
             setTimeout(() => {
               this.dialogRef.close();
             }, 1000);
-
           } else {
             this.customErrors = {
-              error: response.data,
+              error: response.message,
               status: response.status,
               show: true,
             };

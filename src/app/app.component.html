@@ -24,6 +24,6 @@
     </div>
   </div>
 </div>
-<button mat-button (click)="openDialog()">Open dialog</button>
 <app-todo-list *ngIf="!isUnAuthorized" [todoList]="todoList"></app-todo-list>
 
+<button mat-fab color="accent" class="add-icon" (click)="openDialog()" style="font-size: x-large;">+</button>

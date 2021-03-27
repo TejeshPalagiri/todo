@@ -3,11 +3,13 @@
   [expanded]="step === i" (opened)="setStep(i)" class="w-100">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        {{todo["name"]}}
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6">{{todo["name"]}}</div>
+            <div class="col-md-6">{{ todo["status"]}}</div>
+          </div>
+        </div>
       </mat-panel-title>
-      <mat-panel-description>
-       {{ todo["status"]}}
-      </mat-panel-description>
     </mat-expansion-panel-header>
     <p>{{todo["text"]}}</p>
   </mat-expansion-panel>

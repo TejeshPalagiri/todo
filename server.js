@@ -171,7 +171,7 @@ app.post("/api/addtodo", checkWhiteListed, async (req, res) => {
     let addTodo = await database.collection("tododocs").insertOne({
       name: name,
       text: description,
-      status: "created",
+      status: "pending",
       createdDate: date,
     });
 

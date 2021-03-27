@@ -1,0 +1,58 @@
+
+<div class="container" *ngIf="!isUnAuthorized">
+    <div class="row">
+      <div class="col-12">
+        <!-- <form> -->
+        <p>Add new todo</p>
+        <div class="form-floating mb-3 w-100">
+          <input
+            type="text"
+            class="form-control"
+            id="todoName"
+            placeholder="Enter Todo Name"
+            [formControl]="todoName"
+            required
+          />
+          <label for="todoName"
+            >Todo Name <span style="color: red">*</span>
+          </label>
+        </div>
+        <div class="form-floating mb-3 w-100">
+          <textarea
+            class="form-control"
+            placeholder="Todo Description"
+            id="todoDescription"
+            [formControl]="todoDescription"
+            style="height: 100px"
+          ></textarea>
+          <label for="todoDescription"
+            >Todo Description <span style="color: red">*</span>
+          </label>
+        </div>
+        <div class="form-floating mb-3">
+          <button   mat-raised-button color="primary" type="submit"  (click)="addNewTodo()">
+            Add Todo
+
+          </button>
+        </div>
+        <!-- </form> -->
+        <div
+          class="alert"
+          [ngClass]="
+            customErrors.error != 'Successfully Inserted a task' ? 'alert-danger' : 'alert-success'"
+          role="alert"
+          *ngIf="customErrors.show">
+          <strong *ngIf="customErrors.error != 'Successfully Inserted a task'">Ohh Shit!</strong> {{ customErrors.error }}
+        </div>
+      </div>
+      <div
+        class="col-12 col-md-8 d-flex align-items-center justify-content-center table-responsive"
+      >
+        <div class="spinner-border" role="status" *ngIf="gettingTodosLoading">
+          <span class="sr-only"></span>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  

@@ -1,3 +1,4 @@
+<app-header></app-header>
 <div class="container" *ngIf="isUnAuthorized">
   <div class="row">
     <div
@@ -23,86 +24,6 @@
     </div>
   </div>
 </div>
+<button mat-button (click)="openDialog()">Open dialog</button>
+<app-todo-list *ngIf="!isUnAuthorized" [todoList]="todoList"></app-todo-list>
 
-<div class="container mt-5" *ngIf="!isUnAuthorized">
-  <div class="row">
-    <div class="col-12 col-md-4">
-      <!-- <form> -->
-      <p>Add new todo</p>
-      <div class="form-floating mb-3 w-100">
-        <input
-          type="text"
-          class="form-control"
-          id="todoName"
-          placeholder="Enter Todo Name"
-          [formControl]="todoName"
-          required
-        />
-        <label for="todoName"
-          >Todo Name <span style="color: red">*</span>
-        </label>
-      </div>
-      <div class="form-floating mb-3 w-100">
-        <textarea
-          class="form-control"
-          placeholder="Todo Description"
-          id="todoDescription"
-          [formControl]="todoDescription"
-          style="height: 100px"
-        ></textarea>
-        <label for="todoDescription"
-          >Todo Description <span style="color: red">*</span>
-        </label>
-      </div>
-      <div class="form-floating mb-3">
-        <button type="submit" class="btn btn-primary" (click)="addNewTodo()">
-          Add Todo
-        </button>
-      </div>
-      <!-- </form> -->
-      <div
-        class="alert"
-        [ngClass]="
-          customErrors.error != 'Successfully Inserted a task' ? 'alert-danger' : 'alert-success'
-        "
-        role="alert"
-        *ngIf="customErrors.show"
-      >
-        <strong *ngIf="customErrors.error != 'Successfully Inserted a task'">Ohh Shit!</strong> {{ customErrors.error }}
-      </div>
-    </div>
-    <div
-      class="col-12 col-md-8 d-flex align-items-center justify-content-center table-responsive"
-    >
-      <div class="spinner-border" role="status" *ngIf="gettingTodosLoading">
-        <span class="sr-only"></span>
-      </div>
-      <table
-        class="table table-hover"
-        *ngIf="!gettingTodosLoading && todoList.length"
-      >
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Todo Name</th>
-            <th>Todo Description</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let todo of todoList; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td class="text-capitalize">{{ todo["name"] }}</td>
-            <td class="text-capitalize">{{ todo["text"] }}</td>
-            <td class="text-capitalize">{{ todo["status"] }}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="col-12">
-      <p>Completed todos</p>
-    </div>
-  </div>
-</div>

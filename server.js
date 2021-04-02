@@ -104,7 +104,8 @@ let checkWhiteListed = async (req, res, next) => {
   } else {
     return res.send({
       status: 401,
-      data: "Unauthorized Access",
+      message: "Unauthorized Access",
+      data: {},
     });
   }
 };
@@ -395,6 +396,13 @@ app.put("/api/completedTask/:id", checkWhiteListed, async (req, res) => {
       data: {},
     });
   }
+});
+
+// Delete all
+app.get("/api/deleteAll", checkWhiteListed, async (req, res) => {
+  let deletedTasks = await database.collection("tododocs").deleteMany();
+
+  return res.send(deletedTasks);
 });
 
 // Wild card route

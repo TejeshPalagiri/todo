@@ -52,7 +52,7 @@ export class CreateTodoComponent implements OnInit {
     ) {
       this.customErrors.error = "Fill all the required fields";
       this.customErrors.show = true;
-      this.customErrors.status = "Error";
+      this.customErrors.status = "429";
     } else {
       this.customErrors = {
         error: "",

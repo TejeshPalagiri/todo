@@ -120,19 +120,22 @@ app.get("/api/releaseIp", async (req, res) => {
     if (whiteListIp.insertedId) {
       return res.send({
         status: 200,
-        data: "Ip released Successfully",
+        message: "Ip released Successfully",
+        data: {},
       });
     } else {
       return res.send({
         status: 400,
-        data: "Failed to save Ip",
+        message: "Failed to save Ip",
+        data: {},
       });
     }
   } catch (error) {
     console.error(error);
     return res.send({
       status: 500,
-      data: "Internal server error",
+      message: "Internal server error",
+      data: {},
     });
   }
 });
@@ -404,6 +407,13 @@ app.get("/api/deleteAll", checkWhiteListed, async (req, res) => {
 
   return res.send(deletedTasks);
 });
+
+// Ignore All requests
+app.get("/api/deleteWhiteList", checkWhiteListed, async (req, res) => {
+  let blackListedIps = await database.collection("whitelist").deleteMany();
+
+  res.send(blackListedIps);
+})
 
 // Wild card route
 app.get("/*", (req, res) => {

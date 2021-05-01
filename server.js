@@ -1,19 +1,18 @@
-require("dotenv").config();
+const config = require("config");
 const express = require("express");
 const app = express();
 const jwt = require("jsonwebtoken");
-const bodyparser = require("body-parser");
 const cors = require("cors");
 const serveStatic = require("serve-static");
 const mongodb = require("mongodb").MongoClient;
 const objectId = require("mongodb").ObjectID;
 const requestIp = require("request-ip");
-// const { ObjectID } = require("mongodb");
 
 const dbName = "tododocs";
-const dbURL = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@chatapp.rz0qg.gcp.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+const dbURL = `mongodb+srv://${config.userName}:${config.dbPassword}@chatapp.rz0qg.gcp.mongodb.net/${config.dbName}?retryWrites=true&w=majority`;
 let database;
-const port = process.env.PORT || 3000;
+
+const port = process.env.PORT || config.serverPort;
 
 mongodb.connect(
   dbURL,
@@ -33,7 +32,7 @@ mongodb.connect(
 const data = ["tejesh", "charan", "uma", "prasanna"];
 
 app.use(cors());
-app.use(bodyparser.json());
+// app.use(bodyparser.json());
 app.use(express.json());
 app.use(serveStatic(__dirname + "/dist"));
 
@@ -413,7 +412,7 @@ app.get("/api/deleteWhiteList", checkWhiteListed, async (req, res) => {
   let blackListedIps = await database.collection("whitelist").deleteMany();
 
   res.send(blackListedIps);
-})
+});
 
 // Wild card route
 app.get("/*", (req, res) => {

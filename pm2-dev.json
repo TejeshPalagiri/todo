@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "TODO-APP",
+      "script": "./server.js",
+      "env": {
+        "NODE_ENV": "default"
+      },
+      "outfile": "/dev/null",
+      "autorestart": true
+    }
+  ]
+}

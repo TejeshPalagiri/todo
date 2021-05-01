@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "pm2 start pm2-dev.json",
+    "start": "pm2-runtime start pm2-dev.json",
     "build": "ng build --prod",
     "devBuild": "ng build --watch",
     "test": "ng test",

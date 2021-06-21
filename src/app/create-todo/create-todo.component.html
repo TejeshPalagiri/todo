@@ -40,6 +40,7 @@
       </div>
       <!-- </form> -->
       <div
+        *ngIf="customErrors.show"
         class="alert"
         [ngClass]="
           customErrors.error != 'Successfully Inserted a task'
@@ -47,13 +48,18 @@
             : 'alert-success'
         "
         role="alert"
-        *ngIf="customErrors.show"
       >
         {{ customErrors.error }}
       </div>
     </div>
     <div
-      class="col-12 col-md-8 d-flex align-items-center justify-content-center table-responsive"
+      class="
+        col-12 col-md-8
+        d-flex
+        align-items-center
+        justify-content-center
+        table-responsive
+      "
     >
       <div class="spinner-border" role="status" *ngIf="gettingTodosLoading">
         <span class="sr-only"></span>

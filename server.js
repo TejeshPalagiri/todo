@@ -21,7 +21,7 @@ mongodb.connect(
   },
   (err, conn) => {
     if (err) {
-      console.log("Connection failed to database", err);
+      console.error("Connection failed to database", err);
     } else {
       console.log("Connection Successfull");
       database = conn.db(dbName);

@@ -112,6 +112,16 @@ let checkWhiteListed = async (req, res, next) => {
 app.get("/api/releaseIp", async (req, res) => {
   try {
     let ipAddress = await getIp(req);
+    let alreadyExistedIp = await database.collection("whitelist").find({ipAddress: ipAddress}).toArray();
+    if(alreadyExistedIp.length) {
+      return res.send({
+        status: 200,
+        message: "Ip already released Successfully",
+        data: {
+          ipAddress
+        },
+      });
+    }
     let whiteListIp = await database
       .collection("whitelist")
       .insertOne({ ipAddress: ipAddress, createdDate: Date.now() });
@@ -120,7 +130,9 @@ app.get("/api/releaseIp", async (req, res) => {
       return res.send({
         status: 200,
         message: "Ip released Successfully",
-        data: {},
+        data: {
+          ipAddress
+        },
       });
     } else {
       return res.send({

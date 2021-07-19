@@ -105,5 +105,5 @@ typings/
 # TernJS port file
 .tern-port
 
-#package-locj.json
+#package-lock.json
 package-lock.json

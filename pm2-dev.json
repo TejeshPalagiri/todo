@@ -6,6 +6,8 @@
       "env": {
         "NODE_ENV": "default"
       },
+      "instances": "max",
+      "exec_mode": "cluster",
       "outfile": "/dev/null",
       "autorestart": true
     }

@@ -1,0 +1,16 @@
+GET http://localhost:3000/api/gettodo
+
+###
+POST http://localhost:3000/api/addtodo
+Content-Type: application/json
+
+{
+    "name": "task name 5",
+    "description": "task description 5"
+}
+
+###
+DELETE http://localhost:3000/api/deleteTask/610a3f23cdf23c2d80201125
+
+###
+PUT http://localhost:3000/api/completedTask/610a3f72cdf23c2d80201127

@@ -34,7 +34,7 @@ const data = ["tejesh", "charan", "uma", "prasanna"];
 app.use(cors());
 // app.use(bodyparser.json());
 app.use(express.json());
-app.use(serveStatic(__dirname + "/dist"));
+// app.use(serveStatic(__dirname + "/dist"));
 
 app.post("/api/login", (req, res) => {
   const user = {
@@ -428,8 +428,9 @@ app.get("/api/deleteWhiteList", checkWhiteListed, async (req, res) => {
 
 // Wild card route
 app.get("/*", (req, res) => {
+  res.send("<h1> Todo app working fine</h1>")
   // console.log("failed route");
-  res.redirect("/");
+  // res.redirect("/");
   // return res.send({
   //   status: 200,
   //   data: "This is not the right place",

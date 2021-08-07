@@ -83,8 +83,8 @@ app.get("/api/getIp", (req, res) => {
   });
 });
 
-let getIp = async (request) => {
-  let ipAddress = await requestIp.getClientIp(request);
+let getIp = (request) => {
+  let ipAddress = requestIp.getClientIp(request);
   return ipAddress;
 };
 
@@ -94,6 +94,7 @@ const getLocationOnIP = async (req, res) => {
       const ipAddress = getIp(req);
       // const ipAddress = "157.48.181.142";
       let url = `http://ip-api.com/json/${ipAddress}`;
+      console.log(url)
       http.get(url, (connection) => {
         let data = "";
         connection.on('data', (chunk) => {
@@ -115,6 +116,7 @@ const getLocationOnIP = async (req, res) => {
 app.get("/api/getlocation", async (req, res) => {
   try {
     let location = await getLocationOnIP(req);
+    console.log(location);
     res.send({ location: location });
   } catch (error) {
     console.error(error);

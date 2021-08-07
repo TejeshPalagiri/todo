@@ -7,7 +7,7 @@ const serveStatic = require("serve-static");
 const mongodb = require("mongodb").MongoClient;
 const objectId = require("mongodb").ObjectID;
 const requestIp = require("request-ip");
-const request = require("request");
+const http = require("http");
 
 const dbName = "tododocs";
 const dbURL = `mongodb+srv://${config.userName}:${config.dbPassword}@chatapp.rz0qg.gcp.mongodb.net/${config.dbName}?retryWrites=true&w=majority`;
@@ -91,16 +91,27 @@ let getIp = async (request) => {
 const getLocationOnIP = async (req, res) => {
   return new Promise(async (resolve, reject) => {
     try {
-      const ipAddress = getIp(req);
-      // const ipAddress = "157.48.181.142";
+      // const ipAddress = getIp(req);
+      const ipAddress = "157.48.181.142";
       let url = `http://ip-api.com/json/${ipAddress}`;
-      request(url, { json: true }, (err, response, body) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(body.country);
-        }
-      });
+      // request(url, { json: true }, (err, response, body) => {
+      //   if (err) {
+      //     reject(err);
+      //   } else {
+      //     resolve(body.country);
+      //   }
+      // });
+      http.get(url, (connection) => {
+        let data = "";
+        connection.on('data', (chunk) => {
+          data += chunk;
+        })
+        connection.on('end', () => {
+          resolve(JSON.parse(data));
+        })
+      }).on('error', (err) => {
+        reject(err);
+      })
     } catch (error) {
       console.error(error);
       reject(error);

@@ -91,16 +91,9 @@ let getIp = async (request) => {
 const getLocationOnIP = async (req, res) => {
   return new Promise(async (resolve, reject) => {
     try {
-      // const ipAddress = getIp(req);
-      const ipAddress = "157.48.181.142";
+      const ipAddress = getIp(req);
+      // const ipAddress = "157.48.181.142";
       let url = `http://ip-api.com/json/${ipAddress}`;
-      // request(url, { json: true }, (err, response, body) => {
-      //   if (err) {
-      //     reject(err);
-      //   } else {
-      //     resolve(body.country);
-      //   }
-      // });
       http.get(url, (connection) => {
         let data = "";
         connection.on('data', (chunk) => {

@@ -7,6 +7,7 @@ const serveStatic = require("serve-static");
 const mongodb = require("mongodb").MongoClient;
 const objectId = require("mongodb").ObjectID;
 const requestIp = require("request-ip");
+const request = require("request");
 
 const dbName = "tododocs";
 const dbURL = `mongodb+srv://${config.userName}:${config.dbPassword}@chatapp.rz0qg.gcp.mongodb.net/${config.dbName}?retryWrites=true&w=majority`;
@@ -87,6 +88,38 @@ let getIp = async (request) => {
   return ipAddress;
 };
 
+const getLocationOnIP = async (req, res) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const ipAddress = getIp(req);
+      // const ipAddress = "157.48.181.142";
+      let url = `http://ip-api.com/json/${ipAddress}`;
+      request(url, { json: true }, (err, response, body) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(body.country);
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      reject(error);
+    }
+  });
+};
+
+app.get("/api/getlocation", async (req, res) => {
+  try {
+    let location = await getLocationOnIP(req);
+    res.send({ location: location });
+  } catch (error) {
+    console.error(error);
+    res.send({
+      msg: "Internal server error",
+    });
+  }
+});
+
 // Whitelisted ip check middleware
 let checkWhiteListed = async (req, res, next) => {
   let ipFromRequest = await getIp(req);
@@ -112,13 +145,16 @@ let checkWhiteListed = async (req, res, next) => {
 app.get("/api/releaseIp", async (req, res) => {
   try {
     let ipAddress = await getIp(req);
-    let alreadyExistedIp = await database.collection("whitelist").find({ipAddress: ipAddress}).toArray();
-    if(alreadyExistedIp.length) {
+    let alreadyExistedIp = await database
+      .collection("whitelist")
+      .find({ ipAddress: ipAddress })
+      .toArray();
+    if (alreadyExistedIp.length) {
       return res.send({
         status: 200,
         message: "Ip already released Successfully",
         data: {
-          ipAddress
+          ipAddress,
         },
       });
     }
@@ -131,7 +167,7 @@ app.get("/api/releaseIp", async (req, res) => {
         status: 200,
         message: "Ip released Successfully",
         data: {
-          ipAddress
+          ipAddress,
         },
       });
     } else {
@@ -428,7 +464,7 @@ app.get("/api/deleteWhiteList", checkWhiteListed, async (req, res) => {
 
 // Wild card route
 app.get("/*", (req, res) => {
-  res.send("<h1> Todo app working fine</h1>")
+  res.send("<h1> Todo app working fine</h1>");
   // console.log("failed route");
   // res.redirect("/");
   // return res.send({
